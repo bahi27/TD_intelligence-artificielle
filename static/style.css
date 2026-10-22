@@ -1,0 +1,629 @@
+/* Connect Four — Game Search Lab */
+:root {
+  color-scheme: dark;
+  --bg: #0b1220;
+  --panel: #151f31;
+  --panel-alt: #1c2940;
+  --border: #304058;
+  --text: #edf3fc;
+  --muted: #a7b5c9;
+  --accent: #74b9ff;
+  --accent-strong: #348bdf;
+  --human: #f06c76;
+  --ai: #ffd166;
+  --radius: 16px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background: radial-gradient(ellipse at 12% 0%, #18283f 0%, var(--bg) 48%) fixed;
+  color: var(--text);
+  font: 15px/1.5 system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+button,
+input,
+select {
+  font: inherit;
+}
+
+button,
+select {
+  cursor: pointer;
+}
+
+button:disabled,
+input:disabled {
+  cursor: not-allowed;
+  opacity: .48;
+}
+
+:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 3px;
+}
+
+.app-shell {
+  max-width: 1520px;
+  margin: 0 auto;
+  padding: 28px clamp(16px, 3vw, 44px) 22px;
+}
+
+.site-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 22px;
+  margin-bottom: 24px;
+}
+
+.site-header h1 {
+  font-size: clamp(1.6rem, 2.6vw, 2.5rem);
+  line-height: 1.18;
+  letter-spacing: -.035em;
+  margin: 4px 0 8px;
+}
+
+.muted,
+.subtitle,
+.helper-text,
+.board-help,
+.site-footer {
+  color: var(--muted);
+}
+
+.subtitle {
+  margin: 0;
+}
+
+.eyebrow {
+  color: var(--accent);
+  font-size: .7rem;
+  font-weight: 800;
+  letter-spacing: .14em;
+  margin: 0;
+}
+
+.workspace {
+  display: grid;
+  grid-template-columns: minmax(0, 1.5fr) minmax(290px, .85fr);
+  gap: 20px;
+  align-items: start;
+}
+
+.panel {
+  background: linear-gradient(145deg, #19253a, var(--panel));
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: clamp(18px, 2vw, 26px);
+  box-shadow: 0 12px 34px #0002;
+  min-width: 0;
+}
+
+.panel-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.panel h2 {
+  font-size: 1.22rem;
+  margin: 2px 0 0;
+  letter-spacing: -.02em;
+}
+
+.panel h3 {
+  font-size: .94rem;
+  margin: 0 0 12px;
+}
+
+.sidebar {
+  display: grid;
+  gap: 20px;
+}
+
+.button {
+  border: 1px solid transparent;
+  border-radius: 9px;
+  padding: 10px 15px;
+  color: var(--text);
+  font-weight: 650;
+  transition: background .15s, border-color .15s, transform .15s;
+  white-space: nowrap;
+}
+
+.button:not(:disabled):active {
+  transform: translateY(1px);
+}
+
+.button-secondary {
+  background: #23334b;
+  border-color: #3a506b;
+}
+
+.button-secondary:not(:disabled):hover {
+  background: #30445f;
+}
+
+.button-primary {
+  background: var(--accent-strong);
+  color: #fff;
+}
+
+.button-primary:not(:disabled):hover {
+  background: #4d9fea;
+}
+
+.status {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 10px;
+  border-radius: 100px;
+  border: 1px solid #3b5876;
+  background: #223851;
+  color: #dcecff;
+  font-size: .82rem;
+  font-weight: 700;
+  text-align: center;
+}
+
+.status.win {
+  border-color: #4c9476;
+  background: #1c483b;
+  color: #a8f4cf;
+}
+
+.status.lose {
+  border-color: #9b5860;
+  background: #4a2632;
+  color: #ffb5be;
+}
+
+.player-legend {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 22px;
+  margin: 0 0 14px;
+  color: #d8e3f2;
+  font-size: .9rem;
+}
+
+.player-legend span {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+}
+
+.disc {
+  display: inline-block;
+  width: 17px;
+  height: 17px;
+  border-radius: 50%;
+  border: 1px solid #ffffff35;
+  box-shadow: inset 0 -3px 4px #0003;
+  flex: 0 0 auto;
+}
+
+.disc-human,
+.cell.human,
+.cell.player-1 {
+  background: var(--human);
+}
+
+.disc-ai,
+.cell.ai,
+.cell.player-2 {
+  background: var(--ai);
+}
+
+.board-help {
+  font-size: .87rem;
+  margin: 0 0 14px;
+}
+
+.board-wrap {
+  display: flex;
+  justify-content: center;
+  overflow-x: auto;
+  padding: 8px 0 12px;
+}
+
+.connect-board {
+  --cell-size: clamp(38px, 5vw, 66px);
+  display: grid;
+  grid-template-columns: repeat(7, var(--cell-size));
+  grid-template-rows: repeat(6, var(--cell-size));
+  gap: clamp(5px, .75vw, 10px);
+  width: max-content;
+  padding: clamp(9px, 1.1vw, 15px);
+  border: 1px solid #609bda;
+  border-radius: 15px;
+  background: linear-gradient(155deg, #327bd2, #205cae);
+  box-shadow: inset 0 3px 7px #ffffff25, 0 12px 24px #0005;
+}
+
+.cell,
+.board-cell {
+  width: var(--cell-size);
+  height: var(--cell-size);
+  border-radius: 50%;
+  background: #101b2d;
+  border: 2px solid #0e478e;
+  box-shadow: inset 0 5px 9px #0007;
+  padding: 0;
+  display: grid;
+  place-items: center;
+}
+
+.cell.human,
+.cell.player-1,
+.board-cell.human,
+.board-cell.player-1 {
+  background: radial-gradient(circle at 34% 27%, #ffadb0, var(--human) 52%, #b93e50);
+}
+
+.cell.ai,
+.cell.player-2,
+.board-cell.ai,
+.board-cell.player-2 {
+  background: radial-gradient(circle at 34% 27%, #fff3a9, var(--ai) 52%, #c28c23);
+}
+
+.cell.winning,
+.board-cell.winning {
+  outline: 3px solid #fff;
+  outline-offset: -4px;
+  animation: winner-glow 1s ease-in-out infinite alternate;
+}
+
+@keyframes winner-glow {
+  to {
+    filter: brightness(1.3);
+  }
+}
+
+.connect-board:not(.disabled) .cell:not(.human):not(.ai):not(.player-1):not(.player-2):hover,
+.connect-board:not(.disabled) .board-cell:not(.human):not(.ai):not(.player-1):not(.player-2):hover {
+  background: #3b628d;
+}
+
+#game-message {
+  min-height: 1.4em;
+  margin-bottom: 0;
+}
+
+.config-panel label {
+  display: block;
+  color: #dbe5f3;
+  font-size: .88rem;
+  font-weight: 650;
+  margin-bottom: 7px;
+}
+
+select,
+input[type="number"] {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 9px;
+  background: #101b2d;
+  border: 1px solid #455772;
+  color: var(--text);
+}
+
+select:hover,
+input[type="number"]:hover {
+  border-color: #7191b6;
+}
+
+.setting-group {
+  margin-top: 19px;
+}
+
+.setting-group label {
+  display: flex;
+  justify-content: space-between;
+}
+
+.field-value {
+  color: var(--accent);
+  font-weight: 800;
+}
+
+input[type="range"] {
+  width: 100%;
+  accent-color: var(--accent);
+  cursor: pointer;
+}
+
+.helper-text {
+  font-size: .81rem;
+  line-height: 1.5;
+  margin: 12px 0 0;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin: 0;
+}
+
+.stats-grid>div {
+  background: #111d2f;
+  border: 1px solid #2c3e55;
+  padding: 12px;
+  border-radius: 10px;
+  min-width: 0;
+}
+
+.stats-grid dt {
+  color: var(--muted);
+  font-size: .77rem;
+}
+
+.stats-grid dd {
+  font-size: 1.12rem;
+  font-weight: 750;
+  margin: 3px 0 0;
+  overflow-wrap: anywhere;
+  font-variant-numeric: tabular-nums;
+}
+
+.trace-panel {
+  grid-column: 1 / -1;
+}
+
+.trace-heading {
+  margin-bottom: 7px;
+}
+
+.subtle-label {
+  color: var(--muted);
+  font-size: .82rem;
+}
+
+.trace-controls {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 20px 0 12px;
+}
+
+.trace-controls .button {
+  padding: 8px 12px;
+}
+
+.trace-controls .speed-label {
+  margin-left: auto;
+  color: var(--muted);
+  font-size: .85rem;
+}
+
+.trace-controls select {
+  width: auto;
+  min-width: 105px;
+  padding: 8px;
+}
+
+#trace-counter {
+  font-variant-numeric: tabular-nums;
+  min-width: 65px;
+  text-align: right;
+  color: var(--muted);
+}
+
+.trace-slider {
+  display: block;
+  margin: 0 0 19px;
+}
+
+.trace-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 260px;
+  gap: 18px;
+}
+
+.tree-area,
+.event-area {
+  min-width: 0;
+}
+
+.tree-viewport {
+  height: 410px;
+  position: relative;
+  overflow: auto;
+  background: #0d1726;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+}
+
+#tree-svg {
+  display: block;
+  min-width: 100%;
+  min-height: 100%;
+}
+
+.empty-state {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  color: var(--muted);
+  width: 85%;
+  pointer-events: none;
+}
+
+.event-details,
+.node-details {
+  border: 1px solid var(--border);
+  background: #101b2c;
+  border-radius: 10px;
+  padding: 13px;
+  margin: 0 0 18px;
+  color: #dce8f7;
+  overflow-wrap: anywhere;
+  font-size: .86rem;
+}
+
+.event-details {
+  min-height: 92px;
+  white-space: pre-wrap;
+}
+
+.node-details>div {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  border-bottom: 1px solid #2c3d55;
+  padding: 6px 0;
+}
+
+.node-details>div:last-child {
+  border-bottom: 0;
+}
+
+.node-details dt {
+  color: var(--muted);
+}
+
+.node-details dd {
+  margin: 0;
+  font-weight: 650;
+  text-align: right;
+}
+
+/* Generic SVG node classes for the search-tree explorer. */
+.tree-edge {
+  stroke: #506680;
+  stroke-width: 1.6;
+  fill: none;
+}
+
+.tree-edge.pruned {
+  stroke: #f18b90;
+  stroke-dasharray: 5 4;
+  opacity: .7;
+}
+
+.tree-node {
+  cursor: pointer;
+}
+
+.tree-node circle,
+.tree-node rect {
+  fill: #273b56;
+  stroke: #7194b7;
+  stroke-width: 2;
+}
+
+.tree-node.max circle,
+.tree-node.max rect {
+  stroke: #ffd166;
+}
+
+.tree-node.min circle,
+.tree-node.min rect {
+  stroke: #f06c76;
+}
+
+.tree-node.active circle,
+.tree-node.active rect,
+.tree-node.selected circle,
+.tree-node.selected rect {
+  stroke: #8ee0ff;
+  stroke-width: 3;
+  filter: drop-shadow(0 0 5px #65b7ff88);
+}
+
+.tree-node.pruned {
+  opacity: .4;
+}
+
+.tree-node text {
+  fill: #edf3fc;
+  font-size: 11px;
+  text-anchor: middle;
+  dominant-baseline: middle;
+  pointer-events: none;
+}
+
+.site-footer {
+  margin-top: 22px;
+  text-align: center;
+  font-size: .78rem;
+}
+
+@media (max-width: 980px) {
+  .workspace {
+    grid-template-columns: 1fr;
+  }
+
+  .sidebar {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .trace-panel {
+    grid-column: 1;
+  }
+}
+
+@media (max-width: 650px) {
+  .app-shell {
+    padding: 15px 12px;
+  }
+
+  .site-header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .sidebar,
+  .trace-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .connect-board {
+    --cell-size: clamp(31px, 10vw, 48px);
+    gap: 4px;
+    padding: 7px;
+  }
+
+  .trace-controls .speed-label {
+    margin-left: 0;
+  }
+
+  .tree-viewport {
+    height: 320px;
+  }
+
+  .stats-grid {
+    gap: 8px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: .01ms !important;
+    transition-duration: .01ms !important;
+  }
+}

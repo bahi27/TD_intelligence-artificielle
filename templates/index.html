@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#101827">
+  <title>Connect Four · Game Search Lab</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <script src="{{ url_for('static', filename='app.js') }}" defer></script>
+</head>
+
+<body>
+  <div class="app-shell">
+    <header class="site-header">
+      <div>
+        <p class="eyebrow">ARTIFICIAL INTELLIGENCE · PRACTICAL LAB</p>
+        <h1>Connect Four <span class="muted">/ Game Search</span></h1>
+        <p class="subtitle">Explore Minimax, Alpha-Beta pruning, and Monte Carlo Tree Search.</p>
+      </div>
+      <button type="button" id="new-game-btn" class="button button-secondary">↻ New game</button>
+    </header>
+
+    <main class="workspace">
+      <section class="panel game-panel" aria-labelledby="game-heading">
+        <div class="panel-heading">
+          <div>
+            <p class="eyebrow">PLAY</p>
+            <h2 id="game-heading">Game board</h2>
+          </div>
+          <span id="game-status" class="status" role="status" aria-live="polite">Loading game…</span>
+        </div>
+        <div class="player-legend" aria-label="Players">
+          <span><i class="disc disc-human" aria-hidden="true"></i> You · Red</span>
+          <span><i class="disc disc-ai" aria-hidden="true"></i> AI · Yellow</span>
+        </div>
+        <p class="board-help">Click a column to drop your disc. Connect four to win.</p>
+        <div class="board-wrap">
+          <div id="board" class="connect-board" role="grid" aria-label="Connect Four board, 6 rows by 7 columns"></div>
+        </div>
+        <p id="game-message" class="helper-text" aria-live="polite"></p>
+      </section>
+
+      <aside class="sidebar">
+        <section class="panel config-panel" aria-labelledby="config-heading">
+          <div class="panel-heading">
+            <div>
+              <p class="eyebrow">CONFIGURE</p>
+              <h2 id="config-heading">AI opponent</h2>
+            </div>
+          </div>
+          <label for="algorithm">Search algorithm</label>
+          <select id="algorithm" name="algorithm">
+            <option value="random">Random (baseline)</option>
+            <option value="minimax" selected>Minimax</option>
+            <option value="alphabeta">Alpha-Beta pruning</option>
+            <option value="mcts">Monte Carlo Tree Search</option>
+          </select>
+          <div id="depth-settings" class="setting-group">
+            <label for="depth">Search depth <span id="depth-value" class="field-value">4</span></label>
+            <input id="depth" name="depth" type="range" min="1" max="7" value="4">
+          </div>
+          <div id="mcts-settings" class="setting-group" hidden>
+            <label for="num-simulations">MCTS simulations</label>
+            <input id="num-simulations" name="num_simulations" type="number" min="1" max="10000" step="1" value="500">
+          </div>
+          <p class="helper-text">Settings apply to the AI's next move.</p>
+        </section>
+
+        <section class="panel stats-panel" aria-labelledby="stats-heading">
+          <div class="panel-heading">
+            <div>
+              <p class="eyebrow">MEASURE</p>
+              <h2 id="stats-heading">Last AI decision</h2>
+            </div>
+          </div>
+          <dl class="stats-grid">
+            <div>
+              <dt>Algorithm</dt>
+              <dd id="stat-algorithm">—</dd>
+            </div>
+            <div>
+              <dt>Selected column</dt>
+              <dd id="stat-move">—</dd>
+            </div>
+            <div>
+              <dt>Score / reward</dt>
+              <dd id="stat-score">—</dd>
+            </div>
+            <div>
+              <dt>Nodes explored</dt>
+              <dd id="stat-nodes">—</dd>
+            </div>
+            <div>
+              <dt>Decision time</dt>
+              <dd id="stat-time">—</dd>
+            </div>
+            <div>
+              <dt>Recorded events</dt>
+              <dd id="stat-events">—</dd>
+            </div>
+          </dl>
+          <p class="helper-text">Minimax scores and MCTS rewards use different scales.</p>
+        </section>
+      </aside>
+
+      <section class="panel trace-panel" aria-labelledby="trace-heading">
+        <div class="panel-heading trace-heading">
+          <div>
+            <p class="eyebrow">EXPLORE</p>
+            <h2 id="trace-heading">Search-tree explorer</h2>
+          </div>
+          <span id="trace-status" class="subtle-label">No search recorded</span>
+        </div>
+        <p class="helper-text">Replay recorded visits, score updates, and pruning events. Traces may be truncated for
+          large searches.</p>
+        <div class="trace-controls" role="group" aria-label="Search replay controls">
+          <button type="button" id="trace-first" class="button button-secondary" disabled
+            aria-label="First step">⏮</button>
+          <button type="button" id="trace-prev" class="button button-secondary" disabled aria-label="Previous step">←
+            Previous</button>
+          <button type="button" id="trace-play" class="button button-primary" disabled>▶ Play</button>
+          <button type="button" id="trace-next" class="button button-secondary" disabled aria-label="Next step">Next
+            →</button>
+          <button type="button" id="trace-last" class="button button-secondary" disabled
+            aria-label="Last step">⏭</button>
+          <label for="trace-speed" class="speed-label">Speed</label>
+          <select id="trace-speed" aria-label="Replay speed">
+            <option value="1000">Slow</option>
+            <option value="400" selected>Normal</option>
+            <option value="100">Fast</option>
+          </select>
+          <output id="trace-counter" for="trace-step">0 / 0</output>
+        </div>
+        <input id="trace-step" class="trace-slider" type="range" min="0" max="0" value="0" disabled
+          aria-label="Replay step">
+        <div class="trace-layout">
+          <div class="tree-area">
+            <h3>Explored tree</h3>
+            <div id="tree-viewport" class="tree-viewport" tabindex="0" aria-label="Search tree visualization">
+              <svg id="tree-svg" role="img" aria-label="Recorded search tree"></svg>
+              <p id="tree-placeholder" class="empty-state">Play a move to inspect the AI's search.</p>
+            </div>
+          </div>
+          <div class="event-area">
+            <h3>Current event</h3>
+            <div id="event-details" class="event-details" aria-live="polite">No event selected.</div>
+            <h3>Selected node</h3>
+            <dl id="node-details" class="node-details">
+              <div>
+                <dt>Node</dt>
+                <dd>—</dd>
+              </div>
+            </dl>
+            <p class="helper-text">Select a node in the tree to inspect its values.</p>
+          </div>
+        </div>
+      </section>
+    </main>
+    <footer class="site-footer">Game Search Lab · Connect Four · Python + Flask</footer>
+  </div>
+</body>
+
+</html>
