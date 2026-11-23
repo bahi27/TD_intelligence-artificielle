@@ -1,4 +1,7 @@
+<<<<<<< HEAD
 numpy==2.5.1
 matplotlib==3.11.1
 Pillow==12.3.0
 CairoSVG==2.9.0
+Flask>=3.0,<4
+>>>>>>> feux-tricolore

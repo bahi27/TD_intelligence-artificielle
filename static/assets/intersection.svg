@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000" width="1000" height="1000">
+<defs>
+ <pattern id="grass" width="42" height="42" patternUnits="userSpaceOnUse"><rect width="42" height="42" fill="#7fb76a"/><path d="M8 10l3 -4m19 21l4 -5M15 37l3 -4" stroke="#6ba75c" stroke-width="2" opacity=".45"/></pattern>
+ <pattern id="pavers" width="34" height="34" patternUnits="userSpaceOnUse"><rect width="34" height="34" fill="#cdd2cf"/><path d="M0 0H34M0 17H34M17 0V17M0 17V34M34 17V34" stroke="#b1b9b6" stroke-width="1.5" fill="none"/></pattern>
+ <pattern id="asphalt" width="60" height="60" patternUnits="userSpaceOnUse"><rect width="60" height="60" fill="#353b44"/><circle cx="14" cy="22" r="1" fill="#626872" opacity=".3"/><circle cx="42" cy="45" r="1.2" fill="#1e232a" opacity=".35"/></pattern>
+ <filter id="shadow" x="-30%" y="-30%" width="160%" height="160%"><feDropShadow dx="3" dy="5" stdDeviation="5" flood-color="#1a2930" flood-opacity=".22"/></filter>
+ <g id="tree"><ellipse cy="19" rx="29" ry="12" fill="#233c2b" opacity=".24"/><rect x="-6" y="-7" width="12" height="24" rx="3" fill="#80563b"/><circle cx="0" cy="-18" r="31" fill="#367e44"/><circle cx="-17" cy="-24" r="20" fill="#52a650"/><circle cx="15" cy="-31" r="21" fill="#63b95b"/><circle cx="5" cy="-7" r="20" fill="#4a9c4d"/><circle cx="-12" cy="-39" r="9" fill="#82c86b" opacity=".8"/></g>
+ <g id="bush"><ellipse cy="7" rx="25" ry="10" fill="#385f3b" opacity=".2"/><circle cx="-10" cy="-3" r="16" fill="#4a984b"/><circle cx="9" cy="-5" r="19" fill="#64b85b"/><circle cx="0" cy="-14" r="15" fill="#77c46a"/></g>
+ <g id="bench"><rect x="-28" y="-9" width="56" height="8" rx="2" fill="#88583b"/><rect x="-28" y="3" width="56" height="8" rx="2" fill="#a97147"/><path d="M-22 11v10m44 -10v10" stroke="#40464b" stroke-width="5"/></g>
+ <g id="lamp"><ellipse cy="10" rx="11" ry="5" fill="#1b2930" opacity=".25"/><rect x="-3" y="-21" width="6" height="30" fill="#4e606c"/><circle cy="-24" r="8" fill="#ffe3a0" stroke="#4e606c" stroke-width="4"/></g>
+</defs>
+<!-- Base grass and the four pedestrian precincts -->
+<rect width="1000" height="1000" fill="url(#grass)"/>
+<!-- sidewalks behind road, with curb outlines -->
+<path d="M0 0H360V360H0ZM640 0H1000V360H640ZM0 640H360V1000H0ZM640 640H1000V1000H640Z" fill="url(#pavers)" stroke="#aab4b2" stroke-width="8"/>
+<!-- lawns inset from sidewalks -->
+<path d="M0 0H323V323H0ZM677 0H1000V323H677ZM0 677H323V1000H0ZM677 677H1000V1000H677Z" fill="url(#grass)"/>
+<!-- road surface: 2 lanes each direction -->
+<path d="M360 0H640V1000H360Z M0 360H1000V640H0Z" fill="url(#asphalt)"/>
+<!-- curb edges -->
+<path d="M360 0V359H0M640 0V359H1000M0 641H359V1000M1000 641H641V1000" stroke="#e1e4df" stroke-width="8" fill="none"/>
+<!-- road shoulder line -->
+<path d="M370 0V348M630 0V348M370 652V1000M630 652V1000M0 370H348M652 370H1000M0 630H348M652 630H1000" stroke="#a8afb2" stroke-width="2.5" fill="none" opacity=".8"/>
+<!-- centerlines, only outside crossing -->
+<g stroke="#e9cc78" stroke-width="4" stroke-linecap="round"><path d="M497 0V278M503 0V278M497 722V1000M503 722V1000M0 497H278M0 503H278M722 497H1000M722 503H1000"/></g>
+<!-- outer lane dividers -->
+<g stroke="#f4f6f5" stroke-width="4" stroke-dasharray="30 22" opacity=".88"><path d="M430 0V275M570 0V275M430 725V1000M570 725V1000M0 430H275M0 570H275M725 430H1000M725 570H1000"/></g>
+<!-- stop lines -->
+<g stroke="#fff" stroke-width="7"><path d="M367 296H492M508 704H633M296 508V633M704 367V492"/></g>
+<!-- crosswalks -->
+<g fill="#f5f5ee">
+<!-- north and south zebra crossings -->
+<g id="zebraHorizontal"><rect x="373" y="320" width="22" height="35" rx="1"/><rect x="407" y="320" width="22" height="35" rx="1"/><rect x="441" y="320" width="22" height="35" rx="1"/><rect x="475" y="320" width="22" height="35" rx="1"/><rect x="509" y="320" width="22" height="35" rx="1"/><rect x="543" y="320" width="22" height="35" rx="1"/><rect x="577" y="320" width="22" height="35" rx="1"/><rect x="611" y="320" width="22" height="35" rx="1"/></g>
+<use href="#zebraHorizontal" transform="translate(0 325)"/>
+<!-- west and east zebra crossings -->
+<g id="zebraVertical"><rect x="320" y="373" width="35" height="22" rx="1"/><rect x="320" y="407" width="35" height="22" rx="1"/><rect x="320" y="441" width="35" height="22" rx="1"/><rect x="320" y="475" width="35" height="22" rx="1"/><rect x="320" y="509" width="35" height="22" rx="1"/><rect x="320" y="543" width="35" height="22" rx="1"/><rect x="320" y="577" width="35" height="22" rx="1"/><rect x="320" y="611" width="35" height="22" rx="1"/></g>
+<use href="#zebraVertical" transform="translate(325 0)"/>
+</g>
+<!-- landscaping, no cars/lights so they can be independently animated -->
+<g filter="url(#shadow)">
+<use href="#tree" transform="translate(105 115) scale(1.35)"/><use href="#tree" transform="translate(236 235) scale(.82)"/><use href="#bush" transform="translate(215 80)"/><use href="#bench" transform="translate(115 270)"/>
+<use href="#tree" transform="translate(887 113) scale(1.13)"/><use href="#bush" transform="translate(756 245)"/><use href="#bush" transform="translate(837 272) scale(.8)"/>
+<use href="#tree" transform="translate(114 891) scale(1.1)"/><use href="#bush" transform="translate(260 777)"/><use href="#bench" transform="translate(236 906) rotate(-90)"/>
+<use href="#tree" transform="translate(883 892) scale(1.28)"/><use href="#tree" transform="translate(740 755) scale(.72)"/><use href="#bush" transform="translate(790 914)"/>
+</g>
+<!-- simple original buildings -->
+<g filter="url(#shadow)">
+<rect x="702" y="24" width="266" height="169" rx="12" fill="#b98266"/><rect x="713" y="32" width="244" height="146" rx="7" fill="#e8c3a0"/><rect x="737" y="52" width="195" height="98" rx="5" fill="#ad6b56"/><path d="M737 73H932M737 104H932M737 135H932" stroke="#d5977a" stroke-width="3"/><rect x="720" y="177" width="229" height="26" fill="#d45c54"/><path d="M720 177h229" stroke="#f2e6d7" stroke-width="6" stroke-dasharray="22 18"/>
+<rect x="26" y="704" width="188" height="266" rx="12" fill="#b48a70"/><rect x="37" y="716" width="165" height="244" rx="8" fill="#dfc1a2"/><rect x="57" y="738" width="124" height="194" rx="5" fill="#9a796b"/><path d="M73 755H165M73 797H165M73 839H165M73 881H165" stroke="#c8a38b" stroke-width="8"/>
+</g>
+<!-- corner lamp posts -->
+<use href="#lamp" transform="translate(336 336)"/><use href="#lamp" transform="translate(664 336)"/><use href="#lamp" transform="translate(336 664)"/><use href="#lamp" transform="translate(664 664)"/>
+</svg>
