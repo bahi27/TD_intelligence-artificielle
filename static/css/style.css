@@ -1,0 +1,345 @@
+*{box-sizing:border-box}body{margin:0;background:#0d1620;color:#e9f1f5;font-family:Inter,system-ui,-apple-system,Segoe UI,sans-serif}button{font:inherit;cursor:pointer;border:0}button:disabled{opacity:.5;cursor:not-allowed}.shell{max-width:1500px;margin:auto;padding:0 30px}header{height:88px;border-bottom:1px solid #243443;display:flex;align-items:center;justify-content:space-between}.brand{display:flex;gap:13px;align-items:center}.brandicon{display:grid;place-items:center;background:#2ed3a4;color:#102c2a;width:42px;height:42px;border-radius:12px;font-size:29px}.brand strong{font-size:24px;letter-spacing:-1px}.brand strong span{color:#30d8a7}.brand small{display:block;color:#758e9d;letter-spacing:2px;font-size:9px;margin-top:2px}.header-right{display:flex;gap:20px;align-items:center}.live{color:#a5c5b9;font-size:11px;letter-spacing:1px}.live i,.dot{display:inline-block;background:#38d7a3;border-radius:50%;width:7px;height:7px;margin-right:8px;box-shadow:0 0 10px #38d7a3}.subtle{background:#1c2a37;color:#d9e6ed;border:1px solid #324451;padding:10px 16px;border-radius:9px}main{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:25px;margin-top:30px}.arena,.panel{background:#14222f;border:1px solid #2b3e4c;border-radius:16px}.arena{padding:23px;align-self:start}.section-title{display:flex;justify-content:space-between;gap:15px;align-items:center;margin-bottom:19px}.eyebrow{color:#57bba4;font-weight:700;letter-spacing:2px;font-size:10px;margin:0 0 9px}h1{font-size:23px;margin:0;font-weight:650}h2{font-size:19px;margin:0 0 10px;font-weight:650}.badge{background:#183f37;color:#65e6ad;border:1px solid #276c54;border-radius:7px;padding:9px 12px;font-size:10px;letter-spacing:.8px;font-weight:750;white-space:nowrap}.map-wrap{max-width:770px;margin:auto;border:5px solid #283d48;border-radius:13px;overflow:hidden;box-shadow:0 12px 40px #09131b66}.map{width:100%;aspect-ratio:1;position:relative;overflow:hidden;background:#6da96b}.base{width:100%;height:100%;display:block}.map #cars,.map #lights{position:absolute;inset:0;pointer-events:none}.car{position:absolute;width:4.1%;height:7.2%;object-fit:fill;transform:translate(-50%,-50%);filter:drop-shadow(2px 3px 2px #0005)}.light{position:absolute;width:3.3%;height:7.2%;object-fit:fill;transform:translate(-50%,-50%);filter:drop-shadow(1px 2px 2px #0007)}.map-label{position:absolute;background:#122c35d9;color:#dcebef;border:1px solid #ffffff24;padding:4px 8px;border-radius:5px;font-size:9px;letter-spacing:1px}.nw{left:37%;top:2%}.se{right:37%;bottom:2%}.sw{left:2%;top:48%}.ne{right:2%;top:48%}.under-map{display:flex;justify-content:space-between;gap:10px;color:#a1b6c2;font-size:12px;padding-top:17px}aside{display:flex;flex-direction:column;gap:18px}.panel{padding:22px}.hint{color:#8da5b4;font-size:12px;line-height:1.6;margin:0 0 19px}.direction{display:flex;justify-content:space-between;align-items:center;border:1px solid #2d4250;background:#10202c;padding:13px 12px;margin-bottom:9px;border-radius:8px;font-size:12px;font-weight:650}.direction b{font-size:10px;letter-spacing:1px}.green{color:#3de3a3}.red{color:#ff777e}.yellow{color:#ffd36d}.primary,.secondary{display:block;width:100%;padding:14px 10px;border-radius:9px;font-weight:750;margin-top:12px}.primary{background:#2ed3a4;color:#0c3027}.primary:hover{background:#6ceac1}.secondary{background:#263848;color:#dce8ee;border:1px solid #405668}.secondary:hover,.subtle:hover{background:#35495a}.stats{display:grid;grid-template-columns:1fr 1fr;gap:10px}.stats>div{background:#101f2b;border:1px solid #2b3d4b;border-radius:9px;padding:14px}.stats span{display:block;color:#92a9b6;font-size:11px;margin-bottom:7px}.stats strong{font-size:28px;font-weight:650}.segmented{display:flex;gap:5px;background:#0d1b26;padding:5px;border-radius:10px}.segmented button{flex:1;color:#a9bbc7;background:transparent;border-radius:7px;padding:10px 2px;font-size:11px}.segmented button.selected{background:#2c4d51;color:#7ef3c5}.bottom{margin:14px 0 0}footer{display:flex;justify-content:space-between;color:#647e8d;letter-spacing:1.2px;font-size:10px;padding:25px 0}@media(max-width:1000px){main{grid-template-columns:1fr}aside{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}.panel:last-child{grid-column:1/-1}}@media(max-width:650px){.shell{padding:0 12px}header{height:76px}.live{display:none}main{margin-top:15px;gap:12px}.arena{padding:11px}.section-title{align-items:flex-start;flex-direction:column}.badge{font-size:9px}.map-wrap{border-width:2px}.map-label{font-size:6px;padding:3px}.under-map{font-size:10px}aside{display:flex}.panel{padding:17px}footer{font-size:8px}.brand strong{font-size:20px}}
+/* Full-window, zoom-responsive desktop game layout */
+@media (min-width: 1001px) and (min-height: 580px) {
+  html, body { width: 100%; height: 100%; }
+  body { overflow: hidden; }
+  .shell {
+    width: 100%; max-width: none; height: 100dvh;
+    padding-inline: clamp(12px, 1.6vw, 30px);
+    display: flex; flex-direction: column;
+  }
+  header { height: clamp(55px, 8vh, 82px); min-height: 0; flex: 0 0 auto; }
+  main {
+    flex: 1 1 0; min-height: 0; margin-top: clamp(8px, 1.5vh, 20px);
+    display: grid; grid-template-columns: minmax(0, 1fr) clamp(270px, 25vw, 370px);
+    gap: clamp(10px, 1.3vw, 22px); align-items: stretch;
+  }
+  .arena { min-width: 0; min-height: 0; height: 100%; display: flex; flex-direction: column; padding: clamp(10px, 1.5vh, 20px); }
+  .section-title { flex: 0 0 auto; margin-bottom: clamp(6px, 1vh, 14px); }
+  .map-wrap {
+    width: min(100%, calc(100dvh - 185px)); max-width: none;
+    max-height: 100%; aspect-ratio: 1;
+    flex: 1 1 auto; min-height: 0; margin: auto;
+  }
+  .map-wrap { width: min(100%, calc(100dvh - 185px)); flex: 0 1 auto; }
+  .under-map { flex: 0 0 auto; padding-top: clamp(6px, 1vh, 12px); }
+  aside { min-height: 0; gap: clamp(6px, 1vh, 14px); overflow: hidden; }
+  .panel { padding: clamp(10px, 1.5vh, 19px); min-height: 0; }
+  .panel .hint { margin-bottom: clamp(6px, 1vh, 14px); }
+  .panel h2 { margin-bottom: clamp(5px, 1vh, 10px); }
+  .direction { padding-block: clamp(7px, 1vh, 13px); margin-bottom: 6px; }
+  .primary, .secondary { padding-block: clamp(8px, 1.2vh, 14px); margin-top: clamp(5px, .8vh, 10px); }
+  .stats > div { padding: clamp(8px, 1.2vh, 14px); }
+  .stats strong { font-size: clamp(19px, 3vh, 28px); }
+  .segmented button { padding-block: clamp(6px, 1vh, 10px); }
+  .bottom { margin-top: clamp(5px, 1vh, 12px) !important; }
+  footer { flex: 0 0 auto; padding-block: clamp(6px, 1vh, 12px); }
+}
+/* At high browser zoom or on small screens, allow normal page flow
+   instead of clipping essential controls. */
+@media (max-width: 1000px), (max-height: 579px) {
+  body { overflow-y: auto; }
+}
+
+/* Dual-intersection comparison screen */
+.shell{max-width:none}
+main.duel{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:clamp(10px,1.5vw,22px);margin-top:clamp(8px,1.4vh,18px);min-height:0}
+.duel .arena{display:flex;flex-direction:column;align-items:stretch;min-width:0;min-height:0;padding:clamp(10px,1.4vh,18px)}
+.duel .section-title{margin-bottom:clamp(5px,1vh,12px)}
+.duel h1{font-size:clamp(16px,1.6vw,22px)}
+.duel .badge{font-size:clamp(8px,.75vw,10px);padding:7px 9px}
+.duel .map-wrap{width:min(100%,calc(100dvh - 330px));max-width:650px;max-height:100%;flex:0 1 auto;aspect-ratio:1;margin:auto;border-width:3px}
+.direction-row{display:flex;justify-content:space-around;gap:10px;font-size:clamp(10px,.9vw,12px);margin-top:clamp(5px,.8vh,10px);color:#b6cbd5}
+.direction-row b{margin-left:7px}
+.duel-stats{grid-template-columns:repeat(4,minmax(0,1fr));margin-top:clamp(6px,1vh,12px);gap:7px}
+.duel-stats>div{padding:clamp(7px,1vh,11px);min-width:0}
+.duel-stats span{font-size:clamp(9px,.8vw,11px);white-space:nowrap}
+.duel-stats strong{font-size:clamp(18px,2.3vh,28px)}
+.duel .primary,.baseline-note{margin-top:clamp(7px,1vh,12px);min-height:37px;padding:10px}
+.baseline-note{border-radius:9px;background:#1b303c;border:1px solid #34515d;text-align:center;color:#8fbbcc;font-size:12px;display:grid;place-items:center}
+.game-bar{display:flex;justify-content:space-between;align-items:center;gap:15px;padding:clamp(8px,1vh,13px) 0;border-bottom:1px solid #243443}
+.game-clock{display:flex;flex-direction:column;gap:4px;font-weight:700}
+.game-clock small{font-weight:400;color:#8da5b4}
+.game-settings{display:flex;align-items:center;gap:12px}
+.settings-label{color:#a9bbc7;font-size:12px;white-space:nowrap}
+.game-settings .segmented{min-width:210px}
+.game-settings .secondary{width:auto;margin:0;padding:10px 18px;white-space:nowrap}
+@media (min-width:1001px) and (min-height:580px){
+  main.duel{flex:1 1 0;min-height:0;align-items:stretch}
+  .duel .arena{height:100%;overflow:hidden}
+  .duel .map-wrap{width:min(100%,calc(100dvh - 315px));max-height:calc(100% - 155px);min-height:0}
+  .duel-stats{flex:0 0 auto}
+  .game-bar{flex:0 0 auto}
+}
+@media(max-width:1000px),(max-height:579px){
+  body{overflow-y:auto}
+  main.duel{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .duel .map-wrap{width:100%}
+  .game-bar{flex-wrap:wrap}
+}
+@media(max-width:700px){
+  main.duel{grid-template-columns:1fr}
+  .duel .map-wrap{max-width:550px}
+  .game-settings{flex-wrap:wrap}
+  .duel-stats span{white-space:normal}
+}
+
+/* Three-mode application */
+.tabs{display:flex;gap:8px;padding:12px 0 0;flex:0 0 auto;border-bottom:1px solid #243443}
+.tab{background:transparent;color:#9cb2c0;padding:11px 18px;border-radius:9px 9px 0 0;font-weight:700;border-bottom:3px solid transparent}
+.tab:hover{background:#1b303c;color:#e9f1f5}.tab.selected{color:#69e8b8;border-bottom-color:#2ed3a4;background:#1b303c}
+.tab-screen[hidden],#baseline-arena[hidden],#model-picker[hidden],#policy-eval-field[hidden]{display:none!important}
+.tab-screen{min-height:0;flex:1 1 auto}.training-screen{display:grid;grid-template-columns:minmax(310px,1fr) minmax(320px,1.15fr);gap:clamp(10px,1.5vw,22px);padding-top:clamp(10px,1.5vh,18px);overflow:auto}
+.train-card{background:#14222f;border:1px solid #2b3e4c;border-radius:16px;padding:clamp(16px,2vw,26px);min-width:0}
+.train-config{align-self:start}.train-copy,.train-hint{font-size:12px;line-height:1.65;color:#98adba}.train-hint{margin-bottom:0}
+.train-fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin:18px 0}
+.train-fields label,.model-picker label{display:flex;flex-direction:column;gap:7px;color:#b5c9d4;font-size:12px;font-weight:650}
+.train-fields input,.train-fields select,.model-picker select{width:100%;min-width:0;padding:10px;border-radius:8px;border:1px solid #3a5362;background:#0d1b26;color:#e9f1f5;font:inherit}
+.train-results{display:grid;grid-template-rows:1fr 1fr;gap:15px;min-height:0}.train-results .train-card{display:flex;flex-direction:column;min-height:0}
+.empty-chart{flex:1;min-height:130px;border:1px dashed #375365;border-radius:12px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:12px;color:#93a9b6;text-align:center;padding:20px;font-size:12px}.empty-chart strong{color:#d8e6ed}.chart-bars{font-size:40px;letter-spacing:12px;color:#2e786a;opacity:.6}
+.train-console{flex:1;margin:0;min-height:130px;overflow:auto;border-radius:10px;background:#0a1720;padding:17px;color:#91d9bb;font-size:12px;line-height:1.9;white-space:pre-wrap}
+#play-screen{display:flex;flex-direction:column}#play-screen[hidden]{display:none}
+.mode-banner{display:flex;align-items:center;justify-content:space-between;gap:20px;padding:12px 0 0;flex:0 0 auto}.mode-banner>div:first-child{display:flex;flex-direction:column;gap:4px}.mode-banner strong{font-size:16px}.mode-banner span,.model-picker small{font-size:11px;color:#92a9b6}
+.model-picker{display:flex;flex-direction:column;gap:4px;min-width:270px}.model-picker label{font-size:10px}.model-picker select{padding:7px 9px}
+#game-main{margin-top:10px}#game-main.solo{grid-template-columns:minmax(0,1fr);justify-items:center}#game-main.solo .arena{width:min(100%,850px)}
+#game-main.solo .map-wrap{width:min(100%,calc(100dvh - 350px));max-width:650px}
+@media(min-width:1001px) and (min-height:580px){.training-screen{overflow:auto}.train-results{overflow:hidden}#play-screen #game-main{flex:1 1 0;min-height:0}#game-main.solo .map-wrap{max-height:calc(100% - 155px)}}
+@media(max-width:800px){.training-screen{grid-template-columns:1fr}.train-results{grid-template-rows:auto auto}.mode-banner{flex-wrap:wrap}.model-picker{min-width:0;width:100%}}
+@media(max-width:500px){.tabs{gap:2px}.tab{padding:10px 7px;font-size:11px}.train-fields{grid-template-columns:1fr}}
+
+/* Timed match controls and result dialog */
+.duration-label{display:flex;align-items:center;gap:8px;color:#a9bbc7;font-size:12px;white-space:nowrap}
+.duration-label select{background:#142b37;color:#e9f1f5;border:1px solid #3a5362;border-radius:7px;padding:8px;cursor:pointer}
+.result-overlay[hidden]{display:none!important}
+.result-overlay{position:fixed;inset:0;z-index:1000;display:grid;place-items:center;background:rgba(4,12,19,.82);backdrop-filter:blur(7px);padding:16px;overflow:auto}
+.result-card{position:relative;isolation:isolate;width:min(100%,510px);max-height:calc(100dvh - 32px);overflow:auto;text-align:center;background:#142532;border:1px solid #3d6570;border-radius:22px;padding:clamp(18px,3vw,32px);box-shadow:0 24px 90px #0008;animation:result-pop .45s cubic-bezier(.2,1.5,.45,1) both}
+.result-icon{font-size:55px;animation:result-bounce .8s ease both}
+.result-card h2{font-size:clamp(25px,4vw,36px);color:#e7fff4;margin:9px 0}
+.result-message{color:#b4cdd6;line-height:1.5;font-size:14px;margin:8px 0 20px}
+.result-table{position:relative;display:grid;text-align:left;border:1px solid #36505e;border-radius:11px;overflow:hidden;margin:0 0 18px}
+.result-table>div{display:grid;grid-template-columns:minmax(0,1.4fr) repeat(2,minmax(0,1fr));gap:8px;align-items:center;padding:11px 12px;border-bottom:1px solid #2b4150;font-size:12px}
+.result-table>div:last-child{border-bottom:0}
+.result-table-head{background:#213b49;color:#86e6c1;font-weight:750}
+.result-table strong{text-align:center;font-size:13px}
+.result-table-head span:not(:first-child){text-align:center}
+.result-confetti{pointer-events:none;position:absolute;inset:0;overflow:hidden;z-index:-1}
+.result-confetti.celebrate{background-image:radial-gradient(circle,#39e4b0 2px,transparent 3px),radial-gradient(circle,#ffc857 2px,transparent 3px),radial-gradient(circle,#ff7b8b 2px,transparent 3px);background-size:47px 53px,65px 67px,83px 79px;animation:confetti-fall 3s linear infinite}
+@keyframes result-pop{from{opacity:0;transform:translateY(25px) scale(.85)}to{opacity:1;transform:none}}
+@keyframes result-bounce{0%{transform:scale(.4)}65%{transform:scale(1.2)}100%{transform:scale(1)}}
+@keyframes confetti-fall{from{background-position:0 -90px,20px -140px,45px -70px}to{background-position:0 140px,20px 190px,45px 160px}}
+@media(max-width:950px){.game-settings{flex-wrap:wrap;justify-content:flex-end}.game-bar{gap:8px}}
+@media(prefers-reduced-motion:reduce){.result-card,.result-icon,.result-confetti.celebrate{animation:none}}
+
+/* Real training visualizations */
+.train-chart-wrap{min-height:165px;flex:1;display:flex;align-items:center;border:1px solid #34515d;border-radius:12px;background:#0b1924;padding:8px}
+#train-chart{display:block;width:100%;height:auto;max-height:260px}
+.train-chart-legend{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px;color:#89bfae;font-size:11px;margin-top:10px}
+.train-summary{margin-top:12px;border:1px solid #315262;background:#102b34;border-radius:8px;padding:10px 12px;color:#bde7d8;font-size:12px;line-height:1.5}
+#train-start:disabled{opacity:.65;cursor:wait}
+
+/* Match setup and countdown: game content is not mounted visually until start. */
+#match-setup[hidden],#match-countdown[hidden],#play-screen .mode-banner[hidden],
+#play-screen #game-main[hidden],#play-screen .game-bar[hidden]{display:none!important}
+.match-setup{width:min(100%,520px);margin:clamp(35px,8vh,110px) auto;padding:clamp(22px,3vw,38px);background:#14222f;border:1px solid #34515d;border-radius:18px;display:grid;gap:17px;box-shadow:0 18px 60px #0004}
+.match-setup h1{font-size:28px}.match-setup p{margin:0;color:#a9bbc7;line-height:1.6}
+.match-setup label{display:grid;gap:7px;color:#d5e7ef;font-size:13px;font-weight:650}
+.match-setup select{width:100%;background:#0d1b26;color:#e9f1f5;border:1px solid #405668;border-radius:9px;padding:12px;font:inherit}
+.match-setup small{color:#91a9b8;line-height:1.5}
+.match-countdown{position:fixed;inset:0;z-index:100;background:#09131bed;display:grid;place-items:center;text-align:center}
+.match-countdown>div{display:grid;gap:10px}.match-countdown span{color:#5ce5b6;font-weight:800;letter-spacing:4px}
+.match-countdown strong{font-size:clamp(110px,20vw,220px);line-height:1;color:#e9f1f5}
+.match-countdown small{color:#a9bbc7;font-size:18px}
+/* Preserve the entire square intersection at every browser zoom level.
+   Scroll vertically rather than cutting off either arena. */
+#play-screen{overflow:visible!important;height:auto!important;min-height:0!important}
+#play-screen #game-main.duel{height:auto!important;min-height:0!important;flex:none!important;align-items:start!important;grid-template-columns:repeat(2,minmax(0,1fr))}
+#play-screen .duel .arena{height:auto!important;overflow:visible!important;min-height:0!important}
+#play-screen .duel .map-wrap{width:100%!important;max-width:650px!important;max-height:none!important;min-height:0!important;flex:none!important;aspect-ratio:1!important}
+#play-screen .duel .map{width:100%;height:auto;aspect-ratio:1}
+#play-screen .duel .map .base{object-fit:contain}
+@media(max-width:700px){#play-screen #game-main.duel{grid-template-columns:1fr!important}}
+
+/* Correct match-only visibility and compact viewport-fitting layout. */
+#play-screen.setup-active{justify-content:center;min-height:calc(100dvh - 210px)!important}
+#play-screen.setup-active #game-main,#play-screen.setup-active .mode-banner,#play-screen.setup-active .game-bar{display:none!important}
+#play-screen .mode-banner #model-picker{display:none!important}
+#play-screen:not(.setup-active) .mode-banner{padding:4px 0 0}
+#play-screen:not(.setup-active) .game-settings .duration-label,
+#play-screen:not(.setup-active) .game-settings .settings-label,
+#play-screen:not(.setup-active) .game-settings .segmented{display:none}
+/* Fit two entire square maps within the available viewport height, not
+   merely within the available horizontal space. Browser zoom is respected. */
+#play-screen #game-main.duel:not(.solo){display:grid;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:clamp(8px,1.2vw,18px);align-items:start!important}
+#play-screen #game-main.duel:not(.solo) .arena{padding:clamp(7px,1vh,12px)!important;overflow:visible!important;min-height:0;height:auto!important}
+#play-screen #game-main.duel:not(.solo) .map-wrap{
+ width:min(100%,calc(100dvh - 340px))!important;
+ max-width:650px!important;max-height:none!important;aspect-ratio:1!important;
+ margin:0 auto!important;flex:none!important;overflow:hidden!important;
+}
+#play-screen #game-main.duel:not(.solo) .map{aspect-ratio:1!important;width:100%;height:auto}
+#play-screen #game-main.duel:not(.solo) .section-title{margin-bottom:5px}
+#play-screen #game-main.duel:not(.solo) .under-map{padding-top:4px}
+#play-screen #game-main.duel:not(.solo) .duel-stats{margin-top:5px}
+#play-screen #game-main.duel:not(.solo) .duel-stats>div{padding:6px}
+#play-screen #game-main.duel:not(.solo) .duel-stats strong{font-size:clamp(16px,2.4vh,25px)}
+#play-screen #game-main.duel:not(.solo) .primary,#play-screen #game-main.duel:not(.solo) .baseline-note{margin-top:6px;min-height:32px;padding:7px}
+@media(max-width:650px){#play-screen #game-main.duel:not(.solo){grid-template-columns:1fr!important}#play-screen #game-main.duel:not(.solo) .map-wrap{width:min(100%,calc(100dvh - 290px))!important}}
+
+/* v3: reserve space for the full HUD and match controls at 100% zoom.
+   The previous 340px allowance was insufficient on ~900px-high screens. */
+@media (min-width:651px){
+ #play-screen #game-main.duel:not(.solo) .map-wrap{
+   width:min(100%,calc(100dvh - 465px))!important;
+   max-width:650px!important;
+ }
+ #play-screen #game-main.duel:not(.solo){margin-top:6px!important}
+ #play-screen #game-main.duel:not(.solo) .arena{padding:7px!important}
+ #play-screen #game-main.duel:not(.solo) .section-title{margin-bottom:2px!important}
+ #play-screen #game-main.duel:not(.solo) .under-map{padding-top:2px!important}
+ #play-screen #game-main.duel:not(.solo) .duel-stats{margin-top:3px!important}
+ #play-screen #game-main.duel:not(.solo) .duel-stats>div{padding:4px 6px!important}
+ #play-screen #game-main.duel:not(.solo) .primary,
+ #play-screen #game-main.duel:not(.solo) .baseline-note{margin-top:4px!important;min-height:28px!important;padding:5px!important}
+}
+/* If the viewport is exceptionally short, allow scrolling instead of clipping. */
+#play-screen{min-height:0!important;overflow:visible!important}
+
+/* Solo: centered, complete game, sized for the available viewport height. */
+#play-screen #game-main.duel.solo{display:grid!important;grid-template-columns:minmax(0,1fr)!important;justify-items:center!important;align-items:start!important;gap:0!important;margin-top:4px!important}
+#play-screen #game-main.duel.solo .arena{width:min(100%,700px)!important;max-width:700px!important;height:auto!important;min-height:0!important;overflow:visible!important;padding:7px 10px!important;margin:0 auto!important}
+#play-screen #game-main.duel.solo .map-wrap{width:min(100%,calc(100dvh - 440px))!important;max-width:650px!important;max-height:none!important;min-height:0!important;aspect-ratio:1!important;flex:none!important;margin:0 auto!important;overflow:hidden!important}
+#play-screen #game-main.duel.solo .map{width:100%!important;height:auto!important;aspect-ratio:1!important}
+#play-screen #game-main.duel.solo .section-title{margin-bottom:3px!important}
+#play-screen #game-main.duel.solo .duel-stats{margin-top:4px!important}
+#play-screen #game-main.duel.solo .duel-stats>div{padding:5px 7px!important}
+#play-screen #game-main.duel.solo .primary{margin-top:4px!important;min-height:30px!important;padding:6px!important}
+#play-screen #game-main.duel.solo .duel-stats strong{font-size:clamp(16px,2.4vh,24px)!important}
+#setup-model-field[hidden],#setup-model-note[hidden]{display:none!important}
+@media(max-height:700px){#play-screen #game-main.duel.solo .map-wrap{width:min(100%,calc(100dvh - 400px))!important}}
+
+/* v4: explicit view states. Prevent earlier !important grid rules from
+   overriding HTML hidden and keep the setup centered beneath the tabs. */
+#play-screen #game-main[hidden],
+#play-screen #game-main.duel.solo[hidden],
+#play-screen #game-main.duel:not(.solo)[hidden],
+#play-screen #match-setup[hidden],
+#play-screen #match-countdown[hidden],
+#play-screen .mode-banner[hidden],
+#play-screen .game-bar[hidden],
+#play-screen #baseline-arena[hidden] {display:none!important;}
+#play-screen.setup-active {
+  display:flex!important;
+  flex-direction:column!important;
+  justify-content:center!important;
+  align-items:center!important;
+  min-height:max(420px,calc(100dvh - 195px))!important;
+  padding:18px 12px 28px!important;
+  box-sizing:border-box!important;
+}
+#play-screen.setup-active #match-setup:not([hidden]) {
+  display:grid!important;
+  margin:0 auto!important;
+  width:min(100%,520px)!important;
+  box-sizing:border-box!important;
+  gap:12px!important;
+  padding:24px!important;
+}
+#play-screen:not(.setup-active) {justify-content:flex-start!important;}
+#play-screen #game-main.duel.solo:not([hidden]) {display:grid!important;}
+@media(max-height:680px){
+ #play-screen.setup-active{justify-content:flex-start!important;min-height:0!important;}
+ #play-screen.setup-active #match-setup:not([hidden]){padding:16px!important;gap:8px!important;}
+}
+
+/* 40/60 match, AI inspector beside its map; never force hidden elements visible. */
+@media(min-width:1001px){
+ #play-screen #game-main.duel:not(.solo):not([hidden]){grid-template-columns:minmax(0,2fr) minmax(0,3fr)!important;}
+ #play-screen #game-main.duel:not(.solo) .ai-visual{display:grid;grid-template-columns:minmax(0,1fr) minmax(180px,.78fr);gap:12px;align-items:start;}
+ #play-screen #game-main.duel:not(.solo) #baseline-arena .map-wrap{width:min(100%,calc(100dvh - 465px))!important;}
+}
+.ai-visual{min-width:0}.ai-visual>.map-wrap{min-width:0}.ai-inspector{background:#0e1d29;border:1px solid #365364;border-radius:11px;padding:13px;display:flex;flex-direction:column;gap:9px;min-width:0;}
+.ai-inspector .eyebrow{margin:0}.ai-inspector strong{font-size:13px}.ai-inspector p,.ai-inspector small{color:#9bb5c3;font-size:11px;line-height:1.5;margin:0}.q-row{display:flex;justify-content:space-between;border:1px solid #2e4856;border-radius:7px;padding:9px;color:#dcebef;font-size:12px;gap:8px}.q-row.best{border-color:#37d7a5;background:#153b37}.ai-choice{background:#1b3b39;border-radius:8px;padding:10px;color:#79efc0;font-size:13px;font-weight:700}.ai-history-panel{margin:10px 0;border:1px solid #365364;background:#12222f;border-radius:12px;padding:12px}.ai-history-panel summary{cursor:pointer;font-weight:700}.ai-history-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;padding:14px 0}.ai-history-grid svg{width:100%;height:auto}.ai-history-table-wrap{overflow:auto;max-height:220px}.ai-history-panel table{width:100%;border-collapse:collapse;font-size:11px}.ai-history-panel td,.ai-history-panel th{padding:7px;border-bottom:1px solid #304552;text-align:left;white-space:nowrap}.ai-history-panel p,.ai-history-panel small{color:#9bb5c3;font-size:12px;line-height:1.5}
+@media(max-width:1000px){#play-screen #game-main.duel:not(.solo) .ai-visual{display:grid;grid-template-columns:1fr;gap:8px}.ai-history-grid{grid-template-columns:1fr}}
+@media(max-width:650px){#play-screen #game-main.duel:not(.solo) .ai-visual{display:block}}
+#ai-history-panel[hidden]{display:none!important}
+
+/* Match clock: prominent, above the arenas, and never clipped. */
+#play-screen .match-timer-hud[hidden]{display:none!important}
+#play-screen .match-timer-hud{display:flex;align-items:center;justify-content:center;gap:18px;padding:8px 16px;margin:6px auto 8px;width:max-content;max-width:100%;border:1px solid #365566;border-radius:12px;background:#142634;text-align:center}
+#play-screen .timer-label{font-size:11px;font-weight:800;letter-spacing:1.5px;color:#9bb6c5}
+#play-screen .match-timer-hud .game-clock{align-items:center}
+#play-screen #clock{font-size:clamp(25px,3vw,39px);line-height:1.1;font-weight:850;font-variant-numeric:tabular-nums;color:#eaf5fa}
+#play-screen .match-timer-hud.timer-urgent{border-color:#fa6670;background:#4a1d2a;animation:timer-warning 1s ease-in-out infinite alternate}
+#play-screen .timer-urgent #clock{color:#ff6977}
+@keyframes timer-warning{to{box-shadow:0 0 16px #f45d6440}}
+@media(prefers-reduced-motion:reduce){#play-screen .timer-urgent{animation:none}}
+/* Allow the detailed inspector, Q-history and match controls to be reached by scrolling. */
+html,body{height:auto!important;min-height:100%;overflow-y:auto!important;overflow-x:hidden!important}
+.shell{height:auto!important;min-height:100dvh!important;overflow:visible!important}
+#play-screen{height:auto!important;overflow:visible!important;flex:none!important}
+#play-screen #game-main{height:auto!important;overflow:visible!important}
+#play-screen .ai-history-panel{overflow:visible!important}
+footer{position:static!important}
+@media(max-width:650px){#play-screen .match-timer-hud{flex-direction:column;gap:3px;width:100%}}
+
+/* Configurable traffic environment in both game modes. */
+.environment-fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px}
+.match-setup .environment-fields label{min-width:0}
+.match-setup input{width:100%;min-width:0;box-sizing:border-box;background:#0d1b26;color:#e9f1f5;border:1px solid #405668;border-radius:9px;padding:10px;font:inherit}
+.match-setup .environment-fields select{padding:10px}
+.match-setup .environment-warning{color:#f7ca7c;font-size:12px}
+#play-screen.setup-active{overflow-y:auto!important;justify-content:flex-start!important}
+#play-screen.setup-active #match-setup:not([hidden]){margin:16px auto!important;width:min(100%,650px)!important}
+@media(max-width:480px){.environment-fields{grid-template-columns:1fr}}
+
+/* AI training vs game environment comparison */
+.opponent-environment{padding:13px 15px;border:1px solid #34576a;border-radius:12px;background:#102432;margin:8px 0 12px}
+.opponent-environment[hidden]{display:none!important}
+.opponent-environment-head{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:10px}
+.opponent-environment-head strong{color:#e7f3fa;font-size:13px}
+.opponent-environment-head button{border:1px solid #55bca8;background:#164c48;color:#dcfff4;border-radius:7px;padding:8px 11px;cursor:pointer;font-size:12px}
+.opponent-environment-head button:disabled{opacity:.5;cursor:not-allowed}
+.opponent-environment-details{display:grid;gap:3px}
+.opponent-environment-row{display:grid;grid-template-columns:minmax(110px,1.5fr) minmax(75px,1fr) minmax(75px,1fr);gap:8px;padding:6px 7px;font-size:12px;border-radius:5px;color:#b6d1dc}
+.opponent-environment-row:first-child{border-top:1px solid #34576a}
+.opponent-environment-row span:nth-child(2),.opponent-environment-row span:nth-child(3){text-align:right}
+.opponent-environment-row.mismatch{background:#483527;color:#ffdfac}
+.opponent-environment-status{font-size:12px;color:#77e2bd;margin:10px 0 0}
+.opponent-environment-status.mismatch{color:#ffd18c}
+@media(max-width:500px){.opponent-environment-row{grid-template-columns:minmax(90px,1.4fr) minmax(60px,1fr) minmax(60px,1fr);font-size:11px;gap:4px}}
+
+/* Keep training results bounded as iteration logs accumulate. */
+.train-results {
+  grid-template-rows: minmax(0, 1fr) minmax(0, 1fr);
+  height: min(650px, calc(100dvh - 180px));
+  min-height: 360px;
+  min-width: 0;
+  overflow: hidden;
+}
+.train-results > .train-card {
+  min-height: 0;
+  overflow: hidden;
+}
+.train-results .train-chart-wrap {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: hidden;
+}
+.train-results #train-chart {
+  width: 100%;
+  height: 100%;
+  max-height: 100%;
+}
+.train-results .train-console {
+  flex: 1 1 0;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+@media (max-width: 800px) {
+  .train-results {
+    height: auto;
+    min-height: 0;
+    grid-template-rows: 300px 300px;
+  }
+}

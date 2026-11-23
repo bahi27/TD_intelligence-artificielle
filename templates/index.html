@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>TrafficRL · Train · Play · Compete</title><link rel="stylesheet" href="/static/css/style.css"></head>
+<body><div class="shell">
+<header><div class="brand"><span class="brandicon">✳</span><div><strong>TRAFFIC<span>RL</span></strong><small>TRAIN · PLAY · COMPETE</small></div></div><div class="header-right"><span class="live"><i></i> TRAFFIC SIMULATION</span><button id="restart" class="subtle">↻ Restart</button></div></header>
+<nav class="tabs" aria-label="Game modes">
+<button type="button" class="tab selected" data-tab="train" aria-selected="true">🧠 Train AI</button>
+<button type="button" class="tab" data-tab="solo" aria-selected="false">👤 Play Alone</button>
+<button type="button" class="tab" data-tab="versus" aria-selected="false">⚔ Human vs AI</button>
+</nav>
+<section class="training-screen tab-screen" id="train-screen">
+<div class="train-card train-config"><div class="section-title"><div><p class="eyebrow">STEP 01 · CONFIGURE</p><h1>Train a traffic controller</h1></div><span class="badge" id="train-status">READY</span></div>
+<p class="train-copy">Run a real dynamic-programming solver on the traffic MDP. Watch the Bellman residual and policy updates as training progresses.</p>
+<div class="train-fields">
+<label>Algorithm<select id="train-algorithm"><option value="vi">Value Iteration</option><option value="pi">Policy Iteration</option></select></label>
+<label>Discount factor γ<input id="train-gamma" type="number" min="0" max="0.999" step="0.01" value="0.95"></label>
+<label>Convergence tolerance ε<input id="train-epsilon" type="number" min="0.000001" step="0.001" value="0.001"></label>
+<label>Maximum iterations<input id="train-max-iterations" type="number" min="1" step="1" value="1000"></label>
+<label>Traffic intensity<select id="train-traffic"><option value="low">Low</option><option value="normal" selected>Normal</option><option value="rush">Rush hour</option></select></label>
+<label>Service capacity / step<input id="train-service" type="number" min="1" max="10" step="1" value="2"></label>
+<label>Maximum queue per axis<select id="train-queues"><option value="5">5 cars</option><option value="10" selected>10 cars</option><option value="15">15 cars</option><option value="20">20 cars</option></select></label>
+<label>Switch cooldown / steps<input id="train-cooldown" type="number" min="1" max="5" step="1" value="1"></label>
+<label>Switching penalty β<input id="train-penalty" type="number" min="0" max="100" step="0.5" value="0"></label>
+<label>Maximum arrivals / step<input id="train-arrivals" type="number" min="1" max="10" step="1" value="3"></label>
+<label id="policy-eval-field" hidden>Policy evaluation tolerance<input id="train-policy-epsilon" type="number" min="0.000001" step="0.001" value="0.001"></label>
+</div>
+<button class="primary" id="train-start" type="button">▶ Start training</button>
+<div class="train-summary" id="train-summary" role="status" aria-live="polite">Ready to train.</div>
+<p class="train-hint">Models will be saved under a configuration-derived name and reused when the same settings are selected.</p></div>
+<div class="train-results"><div class="train-card"><p class="eyebrow">LIVE TRAINING</p><h2>Convergence</h2><div class="train-chart-wrap"><svg id="train-chart" viewBox="0 0 620 230" role="img" aria-label="Bellman residual by iteration"><text x="310" y="115" text-anchor="middle" fill="#93a9b6">Start training to see real convergence data</text></svg></div><div class="train-chart-legend"><span>● Bellman residual / value change (log scale)</span><span id="train-chart-count">0 iterations</span></div></div>
+<div class="train-card"><p class="eyebrow">BACKEND EVENTS</p><h2>Training console</h2><pre class="train-console" id="train-console" aria-live="off">[READY] Configure an algorithm and click Start training.
+[INFO] All plotted points come from actual backend iterations.</pre></div></div>
+</section>
+<section id="play-screen" class="tab-screen" hidden>
+<div id="match-setup" class="match-setup" hidden>
+  <p class="eyebrow" id="setup-eyebrow">HUMAN VS AI · MATCH SETUP</p>
+  <h1 id="setup-title">Configure your match</h1>
+  <p id="setup-description">Configure the traffic environment. The intersections will appear after the countdown.</p>
+  <label for="setup-model" id="setup-model-field">AI opponent<select id="setup-model"><option value="baseline">Fixed-time baseline · 15 s (demo)</option></select></label>
+  <div id="opponent-environment" class="opponent-environment" hidden>
+    <div class="opponent-environment-head"><strong>AI training environment</strong><button id="use-ai-environment" type="button" disabled>Use AI training environment</button></div>
+    <div id="opponent-environment-details" class="opponent-environment-details"></div>
+    <p id="opponent-environment-status" class="opponent-environment-status" role="status" aria-live="polite"></p>
+  </div>
+  <label for="setup-duration">Match duration<select id="setup-duration"><option value="60">1 minute</option><option value="120" selected>2 minutes</option><option value="180">3 minutes</option></select></label>
+  <label for="setup-traffic">Traffic intensity<select id="setup-traffic"><option value="low">Low</option><option value="normal" selected>Normal</option><option value="rush">Rush hour</option></select></label>
+  <div class="environment-fields">
+    <label>Maximum queue / axis<select id="setup-queues"><option value="5">5 cars</option><option value="10" selected>10 cars</option><option value="15">15 cars</option><option value="20">20 cars</option></select></label>
+    <label>Service capacity / step<input id="setup-service" type="number" min="1" max="10" step="1" value="2"></label>
+    <label>Switch cooldown / steps<input id="setup-cooldown" type="number" min="1" max="5" step="1" value="1"></label>
+    <label>Switching penalty β<input id="setup-penalty" type="number" min="0" max="100" step="0.5" value="0"></label>
+    <label>Maximum arrivals / step<input id="setup-arrivals" type="number" min="1" max="10" step="1" value="3"></label>
+  </div>
+  <small>One traffic step = 3 seconds. Both intersections receive the same Poisson arrivals; the switching penalty affects the reward score, not car movement.</small>
+  <p id="environment-warning" class="environment-warning" hidden></p>
+  <button id="start-match" class="primary" type="button">▶ Start game</button>
+  <small id="setup-model-note">Trained models control the AI intersection using their learned policies. Q-values are computed from the saved value function and training MDP.</small>
+</div>
+<div id="match-countdown" class="match-countdown" hidden role="status" aria-live="assertive"><div><span>GET READY</span><strong id="countdown-number">3</strong><small id="countdown-mode">Human vs AI</small></div></div>
+<div class="match-timer-hud" id="match-timer-hud" hidden><span class="timer-label">⏱ TIME REMAINING</span><div class="game-clock"><span id="clock">02:00 remaining</span><small id="status">Both intersections receive identical arrivals</small></div></div>
+<div class="mode-banner"><div><strong id="mode-heading">Play Alone</strong><span id="mode-description">Practice controlling one intersection.</span></div><div id="model-picker" class="model-picker" hidden><label for="model-select">Pretrained controller</label><select id="model-select"><option value="baseline">Fixed-time baseline · 15 s (demo)</option></select><small>Trained models will appear here once available.</small></div></div>
+<main class="duel" id="game-main">
+<section class="arena" id="human-arena"><div class="section-title"><div><p class="eyebrow">PLAYER 01 · MANUAL CONTROL</p><h1>👤 Human</h1></div><span class="badge" id="human-phase">NORTH–SOUTH GREEN</span></div>
+<div class="map-wrap"><div class="map"><img class="base" src="/static/assets/intersection.svg" alt="Human intersection"><div id="human-cars"></div><div id="human-lights"></div><div class="map-label nw">NORTH</div><div class="map-label se">SOUTH</div><div class="map-label sw">WEST</div><div class="map-label ne">EAST</div></div></div>
+<div class="direction-row"><span>N ↕ S <b id="human-ns-state" class="green">GREEN</b></span><span>E ↔ W <b id="human-ew-state" class="red">RED</b></span></div>
+<div class="stats duel-stats"><div><span>Cars served</span><strong id="human-served">0</strong></div><div><span>Cars waiting</span><strong id="human-waiting">0</strong></div><div><span>Total wait · sec</span><strong id="human-waittime">0</strong></div><div><span>Cars arrived</span><strong id="human-arrived">0</strong></div></div>
+<button id="switch" class="primary">⇄ Switch human traffic lights</button></section>
+<section class="arena" id="baseline-arena"><div class="section-title"><div><p class="eyebrow">PLAYER 02 · AUTOMATIC CONTROL</p><h1>🤖 Fixed-time baseline</h1></div><span class="badge" id="baseline-phase">NORTH–SOUTH GREEN</span></div>
+<div class="ai-visual"><div class="map-wrap"><div class="map"><img class="base" src="/static/assets/intersection.svg" alt="AI intersection"><div id="baseline-cars"></div><div id="baseline-lights"></div><div class="map-label nw">NORTH</div><div class="map-label se">SOUTH</div><div class="map-label sw">WEST</div><div class="map-label ne">EAST</div></div></div>
+<aside class="ai-inspector" id="ai-inspector"><p class="eyebrow">🧠 AI DECISION INSPECTOR</p><strong id="ai-controller">Fixed-time controller</strong><p id="ai-state">Waiting for match…</p><div class="q-row"><span>KEEP</span><b id="ai-q-keep">—</b></div><div class="q-row"><span>SWITCH</span><b id="ai-q-switch">—</b></div><div class="ai-choice" id="ai-choice">Decision pending</div><small id="ai-explanation">Baseline: switch after 15 seconds of green.</small></aside></div><div class="direction-row"><span>N ↕ S <b id="baseline-ns-state" class="green">GREEN</b></span><span>E ↔ W <b id="baseline-ew-state" class="red">RED</b></span></div>
+<div class="stats duel-stats"><div><span>Cars served</span><strong id="baseline-served">0</strong></div><div><span>Cars waiting</span><strong id="baseline-waiting">0</strong></div><div><span>Total wait · sec</span><strong id="baseline-waittime">0</strong></div><div><span>Cars arrived</span><strong id="baseline-arrived">0</strong></div></div>
+<div class="baseline-note" id="ai-controller-note">Automatic controller · switches every 15 s of green</div></section>
+</main>
+<details id="ai-history-panel" class="ai-history-panel" hidden><summary>📊 AI decision history &amp; Q-value evolution</summary><div class="ai-history-grid"><div><svg id="ai-q-chart" viewBox="0 0 500 160" role="img" aria-label="Q values over recent decision steps"></svg><small>Q-values refer to the observed state at each decision step.</small></div><div class="ai-history-table-wrap"><table><thead><tr><th>Time</th><th>State (NS,EW,green)</th><th>Q KEEP</th><th>Q SWITCH</th><th>Action</th></tr></thead><tbody id="ai-history-body"></tbody></table></div></div><details><summary>Explain Bellman action values</summary><p>Q(s,a) = Σ P(s′|s,a) [R(s,a,s′) + γV(s′)]. These are expected discounted rewards from the trained planning MDP, not direct measurements from the animated simulator.</p><p id="ai-bellman-breakdown">Select a trained model to inspect the reward and future-value components.</p></details></details>
+<div class="game-bar"><div class="game-settings"><label class="duration-label" for="match-duration">Match length <select id="match-duration"><option value="60">1 min</option><option value="120" selected>2 min</option><option value="180">3 min</option></select></label><span class="settings-label">Traffic intensity</span><div class="segmented"><button data-rate="0.55">Low</button><button data-rate="1" class="selected">Normal</button><button data-rate="1.7">Rush hour</button></div><button id="pause" class="secondary">Ⅱ Pause simulation</button></div></div>
+</section>
+<div id="match-result" class="result-overlay" hidden role="dialog" aria-modal="true" aria-labelledby="result-heading">
+  <div class="result-card">
+    <div id="result-confetti" class="result-confetti" aria-hidden="true"></div>
+    <div id="result-icon" class="result-icon">🏆</div>
+    <p class="eyebrow">TRAFFICRL · MATCH COMPLETE</p>
+    <h2 id="result-heading">Match complete</h2>
+    <p id="result-message" class="result-message"></p>
+    <div class="result-table">
+      <div class="result-table-head"><span>Metric</span><span>Human</span><span id="result-opponent-title">AI</span></div>
+      <div><span>Total wait</span><strong id="result-human-wait">0 s</strong><strong id="result-ai-wait">—</strong></div>
+      <div><span>Cars served</span><strong id="result-human-served">0</strong><strong id="result-ai-served">—</strong></div>
+      <div><span>Avg. wait / arrival</span><strong id="result-human-avg">0 s</strong><strong id="result-ai-avg">—</strong></div>
+      <div><span>Cars still queued</span><strong id="result-human-queue">0</strong><strong id="result-ai-queue">—</strong></div>
+    </div>
+    <button type="button" id="play-again" class="primary">↻ Play again</button>
+  </div>
+</div>
+<footer>TRAFFICRL · TRAIN / PLAY / COMPETE <span>VALUE ITERATION / POLICY ITERATION</span></footer>
+</div><script src="/static/js/app.js"></script></body></html>
